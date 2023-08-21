@@ -12,11 +12,18 @@ const StyledButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #e1b21c
+    background: #e1b21c;
+  }
+  &:disabled {
+    opacity: 0.4;
   }
 `;
-const Button = ({ children }) => {
-  return <StyledButton>{children}</StyledButton>;
+const Button = ({ activeModalHandler, disabled, children }) => {
+  return (
+    <StyledButton onClick={() => activeModalHandler(true)} disabled={disabled}>
+      {children}
+    </StyledButton>
+  );
 };
 
 export default Button;
