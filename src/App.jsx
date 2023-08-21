@@ -17,7 +17,7 @@ function App() {
       (category) => category.id === categoryId
     );
 
-    setSelectedCategory(category.id || null);
+    setSelectedCategory(category?.id || null);
   };
 
   return (
