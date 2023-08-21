@@ -17,18 +17,11 @@ const StyledLi = styled.li`
   }
 `;
 
-const ListItem = ({
-  children,
-  id,
-  handleClick,
-  selectedId,
-  toggleSelectedId,
-}) => {
+const ListItem = ({ children, id, handleClick, selectedCategory }) => {
   return (
     <StyledLi
-      className={`roboto medium ${selectedId === id && "selected"}`}
+      className={`roboto medium ${selectedCategory === id && "selected"}`}
       onClick={() => {
-        toggleSelectedId(id);
         handleClick(id);
       }}
     >

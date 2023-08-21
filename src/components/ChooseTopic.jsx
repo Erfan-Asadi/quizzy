@@ -11,12 +11,7 @@ const StyledUl = styled.ul`
   padding: 27px 30px;
 `;
 
-const ChooseTopic = ({ handleClick }) => {
-  const [selectedId, setSelectedId] = useState(100);
-
-  const toggleSelectedId = (id) => {
-    setSelectedId(id);
-  };
+const ChooseTopic = ({ handleClick, selectedCategory }) => {
 
   return (
     <section>
@@ -25,8 +20,7 @@ const ChooseTopic = ({ handleClick }) => {
         <ListItem
           id={100}
           handleClick={handleClick}
-          toggleSelectedId={toggleSelectedId}
-          selectedId={selectedId}
+          selectedCategory={selectedCategory}
         >
           Any Category
         </ListItem>
@@ -37,8 +31,7 @@ const ChooseTopic = ({ handleClick }) => {
               key={category.id}
               id={category.id}
               handleClick={handleClick}
-              toggleSelectedId={toggleSelectedId}
-              selectedId={selectedId}
+              selectedCategory={selectedCategory}
             >
               {category.name}
             </ListItem>

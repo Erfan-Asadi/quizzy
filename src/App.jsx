@@ -17,7 +17,7 @@ function App() {
       (category) => category.id === categoryId
     );
 
-    setSelectedCategory(category || null);
+    setSelectedCategory(category.id || null);
   };
 
   return (
@@ -49,7 +49,7 @@ function App() {
         isModalActive={isModalActive}
         activeModalHandler={(value) => setIsModalActive(value)}
       >
-        <ChooseTopic handleClick={(id) => handleSelectCategory(id)} />
+        <ChooseTopic handleClick={(id) => handleSelectCategory(id)} selectedCategory={selectedCategory || 100}/>
       </Modal>
     </div>
   );
