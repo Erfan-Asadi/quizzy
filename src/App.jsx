@@ -4,9 +4,21 @@ import { NavLink } from "react-router-dom";
 import Logo from "./assets/logo.svg";
 import Button from "./components/Button";
 import Modal from "./components/Modal";
+import ChooseTopic from "./components/ChooseTopic";
+import CategoryList from "./api/api_category.json";
+
 function App() {
-  const [isModalActive, setIsModalActive] = useState(false);
-  const [username, setUsername] = useState("");
+  const [isModalActive, setIsModalActive] = useState(true);
+  const [username, setUsername] = useState("Erfan Asadi");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const handleSelectCategory = (categoryId) => {
+    const category = CategoryList.trivia_categories.find(
+      (category) => category.id === categoryId
+    );
+
+    setSelectedCategory(category || null);
+  };
 
   return (
     <div className="welcome">
@@ -36,7 +48,9 @@ function App() {
       <Modal
         isModalActive={isModalActive}
         activeModalHandler={(value) => setIsModalActive(value)}
-      />
+      >
+        <ChooseTopic handleClick={(id) => handleSelectCategory(id)} />
+      </Modal>
     </div>
   );
 }

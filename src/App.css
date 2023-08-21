@@ -35,6 +35,7 @@ a {
   position: relative;
   width: 100%;
   height: 100dvh;
+  padding-top: 14dvh;
 }
 .welcome-input {
   width: 365px;

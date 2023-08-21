@@ -48,7 +48,7 @@ const StyledModal = styled.div`
   }
 `;
 
-const Modal = ({ activeModalHandler, isModalActive }) => {
+const Modal = ({ activeModalHandler, isModalActive, children }) => {
   return (
     <StyledModal className={isModalActive && 'active'}>
       <div className="backdrop" onClick={() => activeModalHandler(false)}></div>
@@ -59,6 +59,7 @@ const Modal = ({ activeModalHandler, isModalActive }) => {
         >
           &times;
         </button>
+      {children}
       </div>
     </StyledModal>
   );
