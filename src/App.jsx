@@ -1,31 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import { NavLink } from "react-router-dom";
 import Logo from "./assets/logo.svg";
-import Button from "./components/Button";
+import ModalButton from "./components/ModalButton";
 import Modal from "./components/Modal";
-import ChooseTopic from "./components/ChooseTopic";
-import CategoryList from "./api/api_category.json";
+import ConfigQuiz from "./components/ConfigQuiz/ConfigQuiz";
 
 function App() {
   const [isModalActive, setIsModalActive] = useState(true);
   const [username, setUsername] = useState("Erfan Asadi");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const handleSelectCategory = (categoryId) => {
-    const category = CategoryList.trivia_categories.find(
-      (category) => category.id === categoryId
-    );
-
-    setSelectedCategory(category?.id || null);
-  };
 
   return (
     <div className="welcome">
       <img
         src={Logo}
         alt="Quizzy Logo"
-        lazy="loading"
+        loading="lazy"
         className="welcome-logo"
       />
       <form>
@@ -38,18 +27,18 @@ function App() {
           onChange={(e) => setUsername(e.target.value)}
         />
       </form>
-      <Button
+      <ModalButton
         activeModalHandler={() => setIsModalActive(true)}
         disabled={!username && true}
       >
         Go!
-      </Button>
+      </ModalButton>
 
       <Modal
         isModalActive={isModalActive}
         activeModalHandler={(value) => setIsModalActive(value)}
       >
-        <ChooseTopic handleClick={(id) => handleSelectCategory(id)} selectedCategory={selectedCategory || 100}/>
+        <ConfigQuiz />
       </Modal>
     </div>
   );

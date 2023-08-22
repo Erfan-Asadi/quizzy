@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 
 const StyledLi = styled.li`
-  font-size: 14px;
+  font-size: 14.7px;
   padding: 10.12px 8.8px;
   border: 0;
   background-color: #d1d1d1;
@@ -10,6 +10,9 @@ const StyledLi = styled.li`
   width: fit-content;
   cursor: pointer;
   border: 2px solid transparent;
+  text-transform: capitalize;
+  
+  text-align: center;
   &:hover,
   &.selected {
     border-color: black;
@@ -17,13 +20,11 @@ const StyledLi = styled.li`
   }
 `;
 
-const ListItem = ({ children, id, handleClick, selectedCategory }) => {
+const ListItem = ({ children, id, handleSelected, selectedId }) => {
   return (
     <StyledLi
-      className={`roboto medium ${selectedCategory === id && "selected"}`}
-      onClick={() => {
-        handleClick(id);
-      }}
+      className={`roboto medium ${selectedId === id && "selected"}`}
+      onClick={() => handleSelected(id)}
     >
       {children}
     </StyledLi>

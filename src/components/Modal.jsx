@@ -8,9 +8,9 @@ const StyledModal = styled.div`
   place-items: center;
   z-index: 1;
   transition: 0.24s ease-out;
-    visibility: hidden;
-    opacity: 0;
-
+  visibility: hidden;
+  opacity: 0;
+  
     &.active {
       visibility: visible;
       opacity: 1;
@@ -34,9 +34,8 @@ const StyledModal = styled.div`
       position: absolute;
       top: 17px;
       right: 17px;
-      font-size: 27px;
+      font-size: 36px;
       color: #d1d1d1;
-      font-weight: bold;
       background-color: transparent;
       border: 0;
       cursor: pointer;
