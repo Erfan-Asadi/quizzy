@@ -1,6 +1,5 @@
 import React from "react";
 import { styled } from "styled-components";
-import Button from "../ModalButton";
 
 const StyledSection = styled.section`
   padding-top: 32px;
@@ -11,17 +10,11 @@ const StyledSection = styled.section`
     color: #333;
     text-align: center;
   }
-
-  footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 25px;
-  }
 `;
 
 const ConfigPart = ({ title, children }) => {
   return (
-    <StyledSection>
+    <StyledSection className="config-part">
       <h2 className="roboto medium">{title}</h2>
       {children}
     </StyledSection>

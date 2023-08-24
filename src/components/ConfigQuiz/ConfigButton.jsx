@@ -18,9 +18,9 @@ const StyledButton = styled.button`
     opacity: 0.4;
   }
 `;
-const Button = ({disabled, children}) => {
+const Button = ({disabled, children ,clickHandler}) => {
   return (
-    <StyledButton disabled={disabled}>
+    <StyledButton disabled={disabled} onClick={clickHandler}>
       {children}
     </StyledButton>
   );

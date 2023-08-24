@@ -1,25 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ConfigPart from "./ConfigPart";
 import ConfigList from "./ConfigList";
 import { trivia_categories, trivia_levels } from "../../api/api_category.json";
 import ConfigButton from "./ConfigButton";
 import ConfigForm from "./ConfigForm";
 import api from "../../api/api";
+import { styled } from "styled-components";
+
+const StyledConfigQuiz = styled.div`
+  overflow: hidden;
+  .parts-container {
+    display: flex;
+    width: 100%;
+    transition: 0.24s ease-out;
+
+    .config-part {
+      width: 100%;
+      flex-shrink: 0;
+    }
+  }
+  footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 25px;
+  }
+`;
 
 const defaultQueryParams = {
-  amount: 5,
+  amount: null,
   category: null, // any category called => (id: 8, means any-category => should repalce null), number type
   difficulty: null, // any difficulty called => (id: 101, means any-difficulty => should replace null), number type
 };
 
 const ConfigQuiz = () => {
   const [queryParams, setQueryParams] = useState(defaultQueryParams);
+  const [maxQuestionsCount, setMaxQuestionsCount] = useState(0); // available questions count for selected(easy, medium, hard, all) difficulty level
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
   const difficultyTitleFromId = trivia_levels.find(
     (level) => level.id === queryParams.difficulty
   )?.name;
-
-  // available questions count for selected(easy, medium, hard, all) difficulty level
-  const [maxQuestionsCount, setMaxQuestionsCount] = useState(0);
+  const [activePart, setActivePart] = useState(0); // 0=category - 1=difficulty - 2=amount
+  const firstRender = useRef(true);
+  const slidesContainerRef = useRef(null);
 
   const updateQuestionsCount = (value) => {
     // if 'any-category' selected
@@ -35,10 +57,22 @@ const ConfigQuiz = () => {
     }
   };
 
+  const startQuiz = () => {
+    console.log(queryParams);
+  };
+
   const handleSelectedItem = (type, id) => {
     setQueryParams((prev) => ({ ...prev, [type]: id }));
   };
 
+  const handleSlides = () => {
+    if (activePart <= 1) {
+      const nextValue = activePart + 1;
+      slidesContainerRef.current.style.transform = `translateX(-${nextValue}00%)`;
+      setActivePart(nextValue);
+      setIsNextButtonDisabled(true);
+    }
+  };
   useEffect(() => {
     // check Maximum available question for any category with their difficulty level
     const checkMaximumQuestion = async () => {
@@ -61,32 +95,59 @@ const ConfigQuiz = () => {
     checkMaximumQuestion();
   }, [queryParams.difficulty]);
 
+  // every time queryParams changes, active 'next-button' for getting to next Part
+  useLayoutEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    } else {
+      setIsNextButtonDisabled(false);
+    }
+  }, [queryParams]);
+
   return (
-    <div className="parts-container">
-      <ConfigPart title="Choose your favorite topic">
-        <ConfigList
-          data={trivia_categories}
-          handleSelected={(id) => handleSelectedItem("category", id)}
-          selectedId={queryParams.category}
-        />
-        <footer>
-          <ConfigButton disabled={false}>Next</ConfigButton>
-        </footer>
-      </ConfigPart>
-      <ConfigPart title="Choose difficulty level">
-        <ConfigList
-          data={trivia_levels}
-          handleSelected={(id) => handleSelectedItem("difficulty", id)}
-          selectedId={queryParams.difficulty}
-        />
-        <footer>
-          <ConfigButton disabled={false}>Next</ConfigButton>
-        </footer>
-      </ConfigPart>
-      <ConfigPart title="Number of questoins">
-        <ConfigForm maxAmount={maxQuestionsCount} />
-      </ConfigPart>
-    </div>
+    <StyledConfigQuiz>
+      <div className="parts-container" ref={slidesContainerRef}>
+        <ConfigPart title="Choose your favorite topic">
+          <ConfigList
+            data={trivia_categories}
+            handleSelected={(id) => handleSelectedItem("category", id)}
+            selectedId={queryParams.category}
+          />
+        </ConfigPart>
+        <ConfigPart title="Choose difficulty level">
+          <ConfigList
+            data={trivia_levels}
+            handleSelected={(id) => handleSelectedItem("difficulty", id)}
+            selectedId={queryParams.difficulty}
+          />
+        </ConfigPart>
+        <ConfigPart title="Number of questoins">
+          <ConfigForm
+            maxAmount={maxQuestionsCount}
+            handleAmountValue={(value) =>
+              setQueryParams({ ...queryParams, amount: value })
+            }
+          />
+        </ConfigPart>
+      </div>
+      <footer>
+        {activePart == 2 ? (
+          <ConfigButton
+            disabled={isNextButtonDisabled}
+            clickHandler={startQuiz}
+          >
+            StartQuiz
+          </ConfigButton>
+        ) : (
+          <ConfigButton
+            disabled={isNextButtonDisabled}
+            clickHandler={handleSlides}
+          >
+            Next
+          </ConfigButton>
+        )}
+      </footer>
+    </StyledConfigQuiz>
   );
 };
 
