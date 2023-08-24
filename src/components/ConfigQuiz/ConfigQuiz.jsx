@@ -58,7 +58,14 @@ const ConfigQuiz = () => {
   };
 
   const startQuiz = () => {
-    console.log(queryParams);
+    const categoryParameter =
+      queryParams.category === 8 ? null : queryParams.category;
+    const difficultyParameter =
+      queryParams.difficulty === 101 ? null : difficultyTitleFromId;
+
+    const apiUrl = `/api.php?amount=${queryParams.amount}${
+      categoryParameter && `&category=${categoryParameter}`
+    }${difficultyParameter && `&difficulty=${difficultyParameter}`}`;
   };
 
   const handleSelectedItem = (type, id) => {

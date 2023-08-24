@@ -6,8 +6,8 @@ import Modal from "./components/Modal";
 import ConfigQuiz from "./components/ConfigQuiz/ConfigQuiz";
 
 function App() {
-  const [isModalActive, setIsModalActive] = useState(true);
-  const [username, setUsername] = useState("Erfan Asadi");
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [username, setUsername] = useState("");
 
   return (
     <div className="welcome">
