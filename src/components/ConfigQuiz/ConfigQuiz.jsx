@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ConfigPart from "./ConfigPart";
 import ConfigList from "./ConfigList";
 import { trivia_categories, trivia_levels } from "../../api/api_category.json";
@@ -6,6 +6,8 @@ import ConfigButton from "./ConfigButton";
 import ConfigForm from "./ConfigForm";
 import api from "../../api/api";
 import { styled } from "styled-components";
+import { QuizContext } from "../../contexts/QuizContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const StyledConfigQuiz = styled.div`
   overflow: hidden;
@@ -39,15 +41,14 @@ const ConfigQuiz = () => {
   const [activePart, setActivePart] = useState(0); // 0=category - 1=difficulty - 2=amount
   const firstRender = useRef(true);
   const slidesContainerRef = useRef(null);
+  const {setQuestions} = useContext(QuizContext);
+  const navigate = useNavigate();
 
   const difficultyTitleFromId = trivia_levels.find(
     (level) => level.id === queryParams.difficulty
   )?.name;
 
   const updateQuestionsCount = (value) => {
-    // if 'any-category' selected
-    if (value === null) return;
-
     // if 'any-difficulty' selected
     if (queryParams.difficulty === 101) {
       setMaxQuestionsCount(value.total_question_count);
@@ -58,17 +59,27 @@ const ConfigQuiz = () => {
     }
   };
 
-  const startQuiz = () => {
+  const startQuiz = async () => {
     const categoryParameter =
       queryParams.category === 8 ? null : queryParams.category;
     const difficultyParameter =
       queryParams.difficulty === 101 ? null : difficultyTitleFromId;
 
     const apiUrl = `/api.php?amount=${queryParams.amount}${
-      categoryParameter && `&category=${categoryParameter}`
-    }${difficultyParameter && `&difficulty=${difficultyParameter}`}`;
-    console.log(apiUrl);
-    
+      categoryParameter ? `&category=${categoryParameter}` : ""
+    }${difficultyParameter ? `&difficulty=${difficultyParameter}` : ""}`;
+
+    try {
+      console.log(apiUrl);
+
+      const { data } = await api.get(apiUrl);
+      if(data.response_code === 0) {
+        setQuestions(data.results);
+        navigate('/quiz');
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleSelectedItem = (type, id) => {
@@ -87,7 +98,8 @@ const ConfigQuiz = () => {
     // check Maximum available question for any category with their difficulty level
     const checkMaximumQuestion = async () => {
       if (queryParams.category === 8) {
-        updateQuestionsCount(null);
+        // we can't find maximum number of all questions, then set max number of questions that can be retrieved per call (50)
+        setMaxQuestionsCount(50);
         return;
       }
       if (queryParams.category) {

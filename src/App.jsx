@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./App.css";
 import Logo from "./assets/logo.svg";
 import ModalButton from "./components/ModalButton";
 import Modal from "./components/Modal";
 import ConfigQuiz from "./components/ConfigQuiz/ConfigQuiz";
+import { QuizContext } from "./contexts/QuizContextProvider";
 
 function App() {
   const [isModalActive, setIsModalActive] = useState(false);
-  const [username, setUsername] = useState("");
 
+  const {setUsername, username} = useContext(QuizContext);
+  
   const submitHandler = (e) => {
     e.preventDefault();
     setIsModalActive(true);
