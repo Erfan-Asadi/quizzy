@@ -9,6 +9,10 @@ function App() {
   const [isModalActive, setIsModalActive] = useState(false);
   const [username, setUsername] = useState("");
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setIsModalActive(true);
+  };
   return (
     <div className="welcome">
       <img
@@ -17,7 +21,7 @@ function App() {
         loading="lazy"
         className="welcome-logo"
       />
-      <form>
+      <form onSubmit={submitHandler}>
         <input
           type="text"
           required
@@ -26,14 +30,8 @@ function App() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+      <ModalButton disabled={!username && true}>Go!</ModalButton>
       </form>
-      <ModalButton
-        activeModalHandler={() => setIsModalActive(true)}
-        disabled={!username && true}
-      >
-        Go!
-      </ModalButton>
-
       <Modal
         isModalActive={isModalActive}
         activeModalHandler={(value) => setIsModalActive(value)}

@@ -36,12 +36,13 @@ const ConfigQuiz = () => {
   const [queryParams, setQueryParams] = useState(defaultQueryParams);
   const [maxQuestionsCount, setMaxQuestionsCount] = useState(0); // available questions count for selected(easy, medium, hard, all) difficulty level
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
-  const difficultyTitleFromId = trivia_levels.find(
-    (level) => level.id === queryParams.difficulty
-  )?.name;
   const [activePart, setActivePart] = useState(0); // 0=category - 1=difficulty - 2=amount
   const firstRender = useRef(true);
   const slidesContainerRef = useRef(null);
+
+  const difficultyTitleFromId = trivia_levels.find(
+    (level) => level.id === queryParams.difficulty
+  )?.name;
 
   const updateQuestionsCount = (value) => {
     // if 'any-category' selected
@@ -66,6 +67,8 @@ const ConfigQuiz = () => {
     const apiUrl = `/api.php?amount=${queryParams.amount}${
       categoryParameter && `&category=${categoryParameter}`
     }${difficultyParameter && `&difficulty=${difficultyParameter}`}`;
+    console.log(apiUrl);
+    
   };
 
   const handleSelectedItem = (type, id) => {

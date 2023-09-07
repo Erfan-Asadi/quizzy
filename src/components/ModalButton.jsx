@@ -10,6 +10,8 @@ const StyledButton = styled.button`
   color: #fff;
   border: 0;
   cursor: pointer;
+  display: block;
+  margin: 34px auto 0;
 
   &:hover {
     background: #e1b21c;
@@ -18,9 +20,9 @@ const StyledButton = styled.button`
     opacity: 0.4;
   }
 `;
-const Button = ({ activeModalHandler, disabled, children }) => {
+const Button = ({ disabled, children }) => {
   return (
-    <StyledButton onClick={() => activeModalHandler(true)} disabled={disabled}>
+    <StyledButton type="submit" disabled={disabled}>
       {children}
     </StyledButton>
   );
