@@ -8,39 +8,49 @@ const StyledButton = styled.button`
   font-family: inherit;
   font-size: 13.93px;
   padding: 8px 25px;
-  background: #fcc822;
-  box-shadow: 0px 10.45px 23.22px -6.96px #fbe18f;
   color: #fff;
   border: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
+  text-transform: capitalize;
 
-  &:hover {
-    background: #e1b21c;
+  &.next {
+    background: #fcc822;
+    box-shadow: 0px 10.45px 23.22px -6.96px #fbe18f;
+
+    &:enabled {
+      &:hover {
+        background: #e1b21c;
+      }
+    }
   }
-  &:disabled {
-    opacity: 0.25;
-  }
-  &.prev {
+  &.previous {
     background: #d1d1d1;
     box-shadow: 0px 10.45px 23.22px -6.96px #d1d1d1;
     color: #333;
 
-    &:hover {
-      background: #b4b4b4;
+    &:enabled {
+      &:hover {
+        background: #b4b4b4;
+      }
     }
     img {
       order: -1;
     }
   }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
 `;
 
-const NavigateButton = ({ title, type = "next" }) => {
+const NavigateButton = ({ type, clickHandler, disabled }) => {
   return (
-    <StyledButton className={type}>
-      {title}
+    <StyledButton className={type} onClick={clickHandler} disabled={disabled}>
+      {type}
       <img
         src={type == "next" ? nextIcon : prevIcon}
         title={`Go to ${type} question`}

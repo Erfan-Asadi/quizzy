@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import ConfigPart from "./ConfigPart";
 import ConfigList from "./ConfigList";
 import { trivia_categories, trivia_levels } from "../../api/api_category.json";
@@ -41,7 +47,7 @@ const ConfigQuiz = () => {
   const [activePart, setActivePart] = useState(0); // 0=category - 1=difficulty - 2=amount
   const firstRender = useRef(true);
   const slidesContainerRef = useRef(null);
-  const {setQuestions} = useContext(QuizContext);
+  const { setQuestions } = useContext(QuizContext);
   const navigate = useNavigate();
 
   const difficultyTitleFromId = trivia_levels.find(
@@ -70,12 +76,10 @@ const ConfigQuiz = () => {
     }${difficultyParameter ? `&difficulty=${difficultyParameter}` : ""}`;
 
     try {
-      console.log(apiUrl);
-
       const { data } = await api.get(apiUrl);
-      if(data.response_code === 0) {
+      if (data.response_code === 0) {
         setQuestions(data.results);
-        navigate('/quiz');
+        navigate("/quiz");
       }
     } catch (e) {
       console.log(e);

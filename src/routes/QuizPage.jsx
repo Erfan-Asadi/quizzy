@@ -40,6 +40,16 @@ const QuizPage = () => {
   const { username, questions } = useContext(QuizContext);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const handlePrevQuestion = () => {
+    if (activeIndex === 0) return;
+    setActiveIndex(activeIndex - 1);
+  };
+
+  const handleNextQuestion = () => {
+    if (activeIndex === questions.length - 1) return;
+    setActiveIndex(activeIndex + 1);
+  };
+
   return (
     <div>
       <StyledHeader>
@@ -53,8 +63,16 @@ const QuizPage = () => {
       </StyledHeader>
       <QuestionDisplayer questions={questions} activeIndex={activeIndex} />
       <StyledFooter>
-        <NavigateButton title="Previous" type="prev"/>
-        <NavigateButton title="Next" />
+        <NavigateButton
+          type="previous"
+          clickHandler={handlePrevQuestion}
+          disabled={activeIndex === 0}
+          />
+        <NavigateButton
+          type="next"
+          clickHandler={handleNextQuestion}
+          disabled={activeIndex === questions.length - 1}
+        />
       </StyledFooter>
     </div>
   );
