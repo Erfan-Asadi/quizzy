@@ -30,12 +30,17 @@ const StyledHeader = styled.header`
 `;
 const StyledFooter = styled.footer`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   margin-top: 30px;
-  padding: 17.5px 75px;
+  padding: 18px 75px 36px;
+  flex-grow: 1;
 `;
-
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+`;
 const QuizPage = () => {
   const { username, questions } = useContext(QuizContext);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,7 +56,7 @@ const QuizPage = () => {
   };
 
   return (
-    <div>
+    <StyledContainer>
       <StyledHeader>
         <Link to="/">
           <img src={Logo} alt="Quizzy Logo" className="logo" />
@@ -67,14 +72,14 @@ const QuizPage = () => {
           type="previous"
           clickHandler={handlePrevQuestion}
           disabled={activeIndex === 0}
-          />
+        />
         <NavigateButton
           type="next"
           clickHandler={handleNextQuestion}
           disabled={activeIndex === questions.length - 1}
         />
       </StyledFooter>
-    </div>
+    </StyledContainer>
   );
 };
 
