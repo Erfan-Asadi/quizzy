@@ -6,6 +6,7 @@ import { styled } from "styled-components";
 import { QuizContext } from "../contexts/QuizContextProvider";
 import NavigateButton from "../components/QuizPage/NavigateButton";
 import QuestionsList from "../components/QuizPage/QuestionsList";
+import ConfigButton from "../components/ConfigQuiz/ConfigButton";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -77,18 +78,18 @@ const QuizPage = () => {
       <QuestionsCounter>
         Question {activeIndex + 1}/{questions.length}
       </QuestionsCounter>
-      <QuestionsList questions={questions} activeIndex={activeIndex}/>     
+      <QuestionsList questions={questions} activeIndex={activeIndex} />
       <StyledFooter>
         <NavigateButton
           type="previous"
           clickHandler={handlePrevQuestion}
           disabled={activeIndex === 0}
         />
-        <NavigateButton
-          type="next"
-          clickHandler={handleNextQuestion}
-          disabled={activeIndex === questions.length - 1}
-        />
+        {activeIndex === questions.length - 1 ? (
+          <ConfigButton clickHandler={()=> alert('end!')}>Submit</ConfigButton>
+        ) : (
+          <NavigateButton type="next" clickHandler={handleNextQuestion} />
+        )}
       </StyledFooter>
     </StyledContainer>
   );
