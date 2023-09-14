@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import QuestionDisplayer from "./QuestionDisplayer";
 import styled from "styled-components";
 
@@ -26,7 +26,7 @@ const QuestionsList = ({ questions, activeIndex }) => {
       >
         {
             questions.map(question => (
-                <QuestionDisplayer key={question.question} question={question} />
+                    <QuestionDisplayer key={question.question} question={question} />
             ))
         }
       </div>

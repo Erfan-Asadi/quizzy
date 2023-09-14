@@ -1,8 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import { styled } from "styled-components";
 import randomHexGenerator from "../../utils/randomHexGenerator";
+import shuffleArray from "../../utils/shuffleArray";
 
-const StyledSection = styled.section`  
+const StyledSection = styled.section`
   .question-body {
     margin-top: 10px;
 
@@ -86,7 +87,10 @@ const StyledSection = styled.section`
     }
   }
 `;
-const QuestionDisplayer = ({question}) => {
+const QuestionDisplayer = ({ question }) => {
+  const allAnswers = [...question.incorrect_answers, question.correct_answer];
+  const shuffledAnswers = shuffleArray(allAnswers);
+  const questionId = randomHexGenerator(10);
 
   return (
     <StyledSection className="question">
@@ -98,13 +102,13 @@ const QuestionDisplayer = ({question}) => {
           {question.question}
         </p>
         <ol className="answers-list" type="A">
-          {question.incorrect_answers.map((ans, i) => {
+          {shuffledAnswers.map((ans, i) => {
             const optionId = randomHexGenerator(15);
 
             return (
               <li key={i}>
                 <label htmlFor={optionId}>
-                  <input type="radio" name="quizOption" id={optionId} />
+                  <input type="radio" name={`quizOption`+questionId} id={optionId} />
                   <span>{ans}</span>
                 </label>
               </li>
@@ -116,4 +120,4 @@ const QuestionDisplayer = ({question}) => {
   );
 };
 
-export default QuestionDisplayer;
+export default memo(QuestionDisplayer);
