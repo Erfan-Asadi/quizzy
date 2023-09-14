@@ -4,8 +4,8 @@ import Logo from "../assets/logo.svg";
 import UserLogo from "../assets/user.svg";
 import { styled } from "styled-components";
 import { QuizContext } from "../contexts/QuizContextProvider";
-import QuestionDisplayer from "../components/QuizPage/QuestionDisplayer";
 import NavigateButton from "../components/QuizPage/NavigateButton";
+import QuestionsList from "../components/QuizPage/QuestionsList";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -41,6 +41,14 @@ const StyledContainer = styled.div`
   flex-direction: column;
   height: 100dvh;
 `;
+const QuestionsCounter = styled.div`
+  width: 100%;
+  font-size: 14px;
+  color: #d1d1d1;
+  text-align: center;
+  padding-top: 19px;
+`;
+
 const QuizPage = () => {
   const { username, questions } = useContext(QuizContext);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -66,7 +74,10 @@ const QuizPage = () => {
           <strong className="username">{username}</strong>
         </span>
       </StyledHeader>
-      <QuestionDisplayer questions={questions} activeIndex={activeIndex} />
+      <QuestionsCounter>
+        Question {activeIndex + 1}/{questions.length}
+      </QuestionsCounter>
+      <QuestionsList questions={questions} activeIndex={activeIndex}/>     
       <StyledFooter>
         <NavigateButton
           type="previous"

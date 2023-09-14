@@ -2,14 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import randomHexGenerator from "../../utils/randomHexGenerator";
 
-const StyledSection = styled.section`
-  padding-top: 19px;
-
-  .question-header {
-    font-size: 14px;
-    color: #d1d1d1;
-    text-align: center;
-  }
+const StyledSection = styled.section`  
   .question-body {
     margin-top: 10px;
 
@@ -93,25 +86,19 @@ const StyledSection = styled.section`
     }
   }
 `;
-const QuestionDisplayer = ({ activeIndex, questions }) => {
-  const activeQuestion = questions[activeIndex];
+const QuestionDisplayer = ({question}) => {
 
   return (
-    <StyledSection>
-      <header className="question-header">
-        <small>
-          Question {activeIndex + 1}/{questions.length}
-        </small>
-      </header>
+    <StyledSection className="question">
       <div className="question-body">
         <p className="question-title">
           <span className="question-type">
-            {activeQuestion.category}: {activeQuestion.difficulty}
+            {question.category}: {question.difficulty}
           </span>
-          {activeQuestion.question}
+          {question.question}
         </p>
         <ol className="answers-list" type="A">
-          {activeQuestion.incorrect_answers.map((ans, i) => {
+          {question.incorrect_answers.map((ans, i) => {
             const optionId = randomHexGenerator(15);
 
             return (
