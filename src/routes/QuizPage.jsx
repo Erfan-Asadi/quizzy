@@ -33,7 +33,6 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-top: 30px;
   padding: 18px 75px 36px;
   flex-grow: 1;
 `;

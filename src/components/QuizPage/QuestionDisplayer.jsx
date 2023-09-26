@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import { styled } from "styled-components";
 import randomHexGenerator from "../../utils/randomHexGenerator";
 import shuffleArray from "../../utils/shuffleArray";
+import HtmlParser from "react-html-parser";
 
 const StyledSection = styled.section`
   .question-body {
@@ -87,6 +88,7 @@ const StyledSection = styled.section`
     }
   }
 `;
+
 const QuestionDisplayer = ({ question }) => {
   const allAnswers = [...question.incorrect_answers, question.correct_answer];
   const shuffledAnswers = shuffleArray(allAnswers);
@@ -99,7 +101,7 @@ const QuestionDisplayer = ({ question }) => {
           <span className="question-type">
             {question.category}: {question.difficulty}
           </span>
-          {question.question}
+          {HtmlParser(question.question)}
         </p>
         <ol className="answers-list" type="A">
           {shuffledAnswers.map((ans, i) => {
@@ -108,8 +110,12 @@ const QuestionDisplayer = ({ question }) => {
             return (
               <li key={i}>
                 <label htmlFor={optionId}>
-                  <input type="radio" name={`quizOption`+questionId} id={optionId} />
-                  <span>{ans}</span>
+                  <input
+                    type="radio"
+                    name={`quizOption` + questionId}
+                    id={optionId}
+                  />
+                  <span>{HtmlParser(ans)}</span>
                 </label>
               </li>
             );
