@@ -26,7 +26,7 @@ const QuestionsList = ({ questions, activeIndex }) => {
       >
         {
             questions.map(question => (
-                    <QuestionDisplayer key={question.question} question={question} />
+                    <QuestionDisplayer key={question.question} question={question} activeIndex={activeIndex}/>
             ))
         }
       </div>

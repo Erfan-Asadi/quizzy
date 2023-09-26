@@ -52,6 +52,7 @@ const QuestionsCounter = styled.div`
 const QuizPage = () => {
   const { username, questions } = useContext(QuizContext);
   const [activeIndex, setActiveIndex] = useState(0);
+  const {userAnswers} = useContext(QuizContext);
 
   const handlePrevQuestion = () => {
     if (activeIndex === 0) return;
@@ -62,6 +63,14 @@ const QuizPage = () => {
     if (activeIndex === questions.length - 1) return;
     setActiveIndex(activeIndex + 1);
   };
+
+  const showResults = ()=> {
+    const total = questions.length;
+    const correct = Object.values(userAnswers).filter(value => value.correct === value.selected).length;
+    alert(`**Total: ${total}**\n **Correct: ${correct}** \n **Incorrect: ${total - correct}**`)
+    
+    
+  }
 
   return (
     <StyledContainer>
@@ -85,7 +94,7 @@ const QuizPage = () => {
           disabled={activeIndex === 0}
         />
         {activeIndex === questions.length - 1 ? (
-          <ConfigButton clickHandler={()=> alert('end!')}>Submit</ConfigButton>
+          <ConfigButton clickHandler={showResults}>Submit</ConfigButton>
         ) : (
           <NavigateButton type="next" clickHandler={handleNextQuestion} />
         )}

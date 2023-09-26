@@ -50,7 +50,7 @@ const ConfigForm = ({ maxAmount = 50, handleAmountValue }) => {
     <div>
       <StyledForm>
         <input
-          type="text"
+          type="number"
           max={max}
           placeholder={`max to ${max}`}
           onChange={(e) => changeHandler(e)}

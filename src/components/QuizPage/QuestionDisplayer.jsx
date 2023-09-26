@@ -1,8 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useContext, useMemo } from "react";
 import { styled } from "styled-components";
 import randomHexGenerator from "../../utils/randomHexGenerator";
 import shuffleArray from "../../utils/shuffleArray";
 import HtmlParser from "react-html-parser";
+import { QuizContext } from "../../contexts/QuizContextProvider";
 
 const StyledSection = styled.section`
   .question-body {
@@ -89,11 +90,21 @@ const StyledSection = styled.section`
   }
 `;
 
-const QuestionDisplayer = ({ question }) => {
+const QuestionDisplayer = ({ question, activeIndex }) => {
   const allAnswers = [...question.incorrect_answers, question.correct_answer];
-  const shuffledAnswers = shuffleArray(allAnswers);
-  const questionId = randomHexGenerator(10);
+  const {setUserAnswers} = useContext(QuizContext);
+  const shuffledAnswers = useMemo(()=> shuffleArray(allAnswers), []);
+  const questionId = useMemo(()=> randomHexGenerator(10), []);
 
+  const clickAnswerHandler = (ans, correctAns)=> {
+    setUserAnswers(prev => ({
+      ...prev,
+      [activeIndex]: {
+        selected: ans,
+        correct: correctAns
+      }
+    }))
+  }
   return (
     <StyledSection className="question">
       <div className="question-body">
@@ -110,10 +121,12 @@ const QuestionDisplayer = ({ question }) => {
             return (
               <li key={i}>
                 <label htmlFor={optionId}>
+                  
                   <input
                     type="radio"
                     name={`quizOption` + questionId}
                     id={optionId}
+                    onChange={() => clickAnswerHandler(ans,question.correct_answer)}
                   />
                   <span>{HtmlParser(ans)}</span>
                 </label>
@@ -126,4 +139,4 @@ const QuestionDisplayer = ({ question }) => {
   );
 };
 
-export default memo(QuestionDisplayer);
+export default QuestionDisplayer;
