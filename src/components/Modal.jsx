@@ -47,14 +47,14 @@ const StyledModal = styled.div`
   }
 `;
 
-const Modal = ({ activeModalHandler, isModalActive, children }) => {
+const Modal = ({ closeModalHandler, isModalActive, children }) => {
   return (
     <StyledModal className={isModalActive && 'active'}>
-      <div className="backdrop" onClick={() => activeModalHandler(false)}></div>
+      <div className="backdrop" onClick={closeModalHandler}></div>
       <div className="modal-body">
         <button
           className="close-modal"
-          onClick={() => activeModalHandler(false)}
+          onClick={closeModalHandler}
         >
           &times;
         </button>

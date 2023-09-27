@@ -36,7 +36,7 @@ function App() {
       </form>
       <Modal
         isModalActive={isModalActive}
-        activeModalHandler={(value) => setIsModalActive(value)}
+        closeModalHandler={() => setIsModalActive(false)}
       >
         <ConfigQuiz />
       </Modal>

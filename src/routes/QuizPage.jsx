@@ -7,6 +7,8 @@ import { QuizContext } from "../contexts/QuizContextProvider";
 import NavigateButton from "../components/QuizPage/NavigateButton";
 import QuestionsList from "../components/QuizPage/QuestionsList";
 import ConfigButton from "../components/ConfigQuiz/ConfigButton";
+import Modal from "../components/Modal";
+import YourScore from "../components/QuizPage/YourScore";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -52,7 +54,10 @@ const QuestionsCounter = styled.div`
 const QuizPage = () => {
   const { username, questions } = useContext(QuizContext);
   const [activeIndex, setActiveIndex] = useState(0);
-  const {userAnswers} = useContext(QuizContext);
+  const { userAnswers } = useContext(QuizContext);
+
+  // when 'submit' button appeared
+  const [isModalActive, setIsModalActive] = useState(false);
 
   const handlePrevQuestion = () => {
     if (activeIndex === 0) return;
@@ -64,13 +69,12 @@ const QuizPage = () => {
     setActiveIndex(activeIndex + 1);
   };
 
-  const showResults = ()=> {
-    const total = questions.length;
-    const correct = Object.values(userAnswers).filter(value => value.correct === value.selected).length;
-    alert(`**Total: ${total}**\n **Correct: ${correct}** \n **Incorrect: ${total - correct}**`)
-    
-    
-  }
+  const showResults = () => {
+    // const total = questions.length;
+    // const correct = Object.values(userAnswers).filter(value => value.correct === value.selected).length;
+    // alert(`**Total: ${total}**\n **Correct: ${correct}** \n **Incorrect: ${total - correct}**`)
+    setIsModalActive(true);
+  };
 
   return (
     <StyledContainer>
@@ -99,6 +103,13 @@ const QuizPage = () => {
           <NavigateButton type="next" clickHandler={handleNextQuestion} />
         )}
       </StyledFooter>
+
+      <Modal
+        isModalActive={isModalActive}
+        closeModalHandler={() => setIsModalActive(false)}
+      >
+        <YourScore />
+      </Modal>
     </StyledContainer>
   );
 };
