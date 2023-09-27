@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import UserLogo from "../assets/user.svg";
@@ -52,12 +52,13 @@ const QuestionsCounter = styled.div`
 `;
 
 const QuizPage = () => {
-  const { username, questions } = useContext(QuizContext);
+  const { username, questions, userAnswers } = useContext(QuizContext);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { userAnswers } = useContext(QuizContext);
 
   // when 'submit' button appeared
   const [isModalActive, setIsModalActive] = useState(false);
+  const MemoizedYourScore = useMemo(()=> <YourScore />, []);
+  const isCompletedAnsweredQuiz = Object.keys(userAnswers).length ===  questions.length;
 
   const handlePrevQuestion = () => {
     if (activeIndex === 0) return;
@@ -69,12 +70,6 @@ const QuizPage = () => {
     setActiveIndex(activeIndex + 1);
   };
 
-  const showResults = () => {
-    // const total = questions.length;
-    // const correct = Object.values(userAnswers).filter(value => value.correct === value.selected).length;
-    // alert(`**Total: ${total}**\n **Correct: ${correct}** \n **Incorrect: ${total - correct}**`)
-    setIsModalActive(true);
-  };
 
   return (
     <StyledContainer>
@@ -98,7 +93,7 @@ const QuizPage = () => {
           disabled={activeIndex === 0}
         />
         {activeIndex === questions.length - 1 ? (
-          <ConfigButton clickHandler={showResults}>Submit</ConfigButton>
+          <ConfigButton clickHandler={() => setIsModalActive(true)} disabled={!isCompletedAnsweredQuiz}>Submit</ConfigButton>
         ) : (
           <NavigateButton type="next" clickHandler={handleNextQuestion} />
         )}
@@ -108,7 +103,7 @@ const QuizPage = () => {
         isModalActive={isModalActive}
         closeModalHandler={() => setIsModalActive(false)}
       >
-        <YourScore />
+        {MemoizedYourScore}
       </Modal>
     </StyledContainer>
   );

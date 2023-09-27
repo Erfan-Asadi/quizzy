@@ -1,12 +1,18 @@
-import React from "react";
+import React, { memo, useContext } from "react";
 import styled from "styled-components";
 import YourscoreBg from "../../assets/yourscore.svg";
+import { QuizContext } from "../../contexts/QuizContextProvider";
+
+const StyledContainer = styled.div`
+  overflow: auto;
+  height: 450px;
+  width: calc(100% - 20px);
+`;
 
 const StyledPanel = styled.div`
   width: max(444px, 65%);
-  height: 100%;
-  min-height: 358px;
-  margin: auto;
+  min-height: 100%;
+  margin: 0 auto 82px;
   background: url(${YourscoreBg}) 0 0 / 100% 100%;
   display: flex;
   flex-direction: column;
@@ -17,7 +23,6 @@ const StyledPanel = styled.div`
 
   h3 {
     font-size: 37.2px;
-    margin-top: 24px;
   }
   .score {
     margin: 10px 0 27px;
@@ -38,28 +43,37 @@ const StyledPanel = styled.div`
 `;
 
 const YourScore = () => {
+  const { userAnswers, questions } = useContext(QuizContext);
+
+  const total = questions.length;
+  const correct = Object.values(userAnswers).filter(
+    (value) => value.correct === value.selected
+  ).length;
+  const score = Math.floor((correct / total) * 100);
+  console.log(userAnswers);
+  
+
   return (
-    <div>
+    <StyledContainer>
       <StyledPanel className="score-panel roboto">
         <h3>Your Score</h3>
         <p className="score bold">
-          <strong>65</strong>/100
+          <strong>{score}</strong>/100
         </p>
         <ul className="answers-istatistic medium">
           <li>
-            Total: <span>10</span>
+            Total: <span>{total}</span>
           </li>
           <li>
-            Correct: <span>4</span>
+            Correct: <span>{correct}</span>
           </li>
           <li>
-            Incorrect: <span>6</span>
+            Incorrect: <span>{total - correct}</span>
           </li>
         </ul>
       </StyledPanel>
-      
-    </div>
+    </StyledContainer>
   );
 };
 
-export default YourScore;
+export default  YourScore;
