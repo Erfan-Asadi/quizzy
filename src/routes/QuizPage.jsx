@@ -57,8 +57,9 @@ const QuizPage = () => {
 
   // when 'submit' button appeared
   const [isModalActive, setIsModalActive] = useState(false);
-  const MemoizedYourScore = useMemo(()=> <YourScore />, []);
-  const isCompletedAnsweredQuiz = Object.keys(userAnswers).length ===  questions.length;
+  const MemoizedYourScore = useMemo(() => <YourScore />, []);
+  const isCompletedAnsweredQuiz =
+    Object.keys(userAnswers).length === questions.length;
 
   const handlePrevQuestion = () => {
     if (activeIndex === 0) return;
@@ -69,7 +70,6 @@ const QuizPage = () => {
     if (activeIndex === questions.length - 1) return;
     setActiveIndex(activeIndex + 1);
   };
-
 
   return (
     <StyledContainer>
@@ -93,18 +93,25 @@ const QuizPage = () => {
           disabled={activeIndex === 0}
         />
         {activeIndex === questions.length - 1 ? (
-          <ConfigButton clickHandler={() => setIsModalActive(true)} disabled={!isCompletedAnsweredQuiz}>Submit</ConfigButton>
+          <ConfigButton
+            clickHandler={() => setIsModalActive(true)}
+            disabled={!isCompletedAnsweredQuiz}
+          >
+            Submit
+          </ConfigButton>
         ) : (
           <NavigateButton type="next" clickHandler={handleNextQuestion} />
         )}
       </StyledFooter>
 
-      <Modal
-        isModalActive={isModalActive}
-        closeModalHandler={() => setIsModalActive(false)}
-      >
-        {MemoizedYourScore}
-      </Modal>
+      {isModalActive && (
+        <Modal
+          isModalActive={isModalActive}
+          closeModalHandler={() => setIsModalActive(false)}
+        >
+          {MemoizedYourScore}
+        </Modal>
+      )}
     </StyledContainer>
   );
 };

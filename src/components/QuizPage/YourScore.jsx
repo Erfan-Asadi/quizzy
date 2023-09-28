@@ -2,6 +2,9 @@ import React, { memo, useContext } from "react";
 import styled from "styled-components";
 import YourscoreBg from "../../assets/yourscore.svg";
 import { QuizContext } from "../../contexts/QuizContextProvider";
+import shuffleArray from "../../utils/shuffleArray";
+import randomHexGenerator from "../../utils/randomHexGenerator";
+import HtmlParser from "react-html-parser";
 
 const StyledContainer = styled.div`
   overflow: auto;
@@ -41,6 +44,75 @@ const StyledPanel = styled.div`
     }
   }
 `;
+const StyledAnswersOl = styled.ol`
+  margin: 12px 0 38px;
+  padding: 0 36px;
+
+  li {
+    position: relative;
+    height: 53px;
+    pointer-events: none;
+    user-select: none;
+    
+    &.selected::before {
+      background-color: #fcc822;
+    }
+    &::before {
+      width: 33px;
+      height: 16px;
+      border-radius: 3px 3px 0 3px;
+      background-color: #d1d1d1;
+      top: 5px;
+      left: -21px;
+      content: "";
+      position: absolute;
+      z-index: -1;
+    }
+    &::marker {
+      color: #fff;
+      font-size: 14px;
+    }
+    label {
+      position: relative;
+      top: 17px;
+      left: 19px;
+      cursor: pointer;
+
+      .title {
+        background-color: #cdfdcd;
+        padding: 3px 5px;
+        border-radius: 3px;
+        color: green;
+      }
+      input {
+        position: relative;
+
+        &::after {
+          width: 11px;
+          height: 11px;
+          background-color: #fff;
+          border-radius: 50%;
+          content: "";
+          display: block;
+          box-shadow: 0 0 0 2px #fff, 0 0 0 5px #fcc822,
+            0 3px 5px 6px rgba(252, 200, 34, 0.3);
+        }
+        &:checked::after {
+          background-color: #fcc822;
+          box-shadow: 0 0 0 2px #fff, 0 0 0 5px #fcc822,
+            0 3px 5px 6px rgba(252, 200, 34, 0.3);
+        }
+      }
+      span {
+        margin-left: 9px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+        vertical-align: text-top;
+      }
+    }
+  }
+`;
 
 const YourScore = () => {
   const { userAnswers, questions } = useContext(QuizContext);
@@ -50,8 +122,6 @@ const YourScore = () => {
     (value) => value.correct === value.selected
   ).length;
   const score = Math.floor((correct / total) * 100);
-  console.log(userAnswers);
-  
 
   return (
     <StyledContainer>
@@ -72,8 +142,40 @@ const YourScore = () => {
           </li>
         </ul>
       </StyledPanel>
+      <ul>
+        {questions.map((q, ind) => {
+          const allAnswers = [...q.incorrect_answers, q.correct_answer];
+          const shuffledAnswers = shuffleArray(allAnswers);
+
+          return (
+            <li key={q.question}>
+              <p>
+                ({ind + 1}){q.question}
+              </p>
+              <StyledAnswersOl>
+                {shuffledAnswers.map((ans, i) => {
+                  return (
+                    <li key={i}>
+                      <label>
+                        <input
+                          type="radio"
+                          checked={ans === userAnswers[ind].selected}
+                        />
+                        <span>{HtmlParser(ans)}</span>
+                        {ans === userAnswers[ind].correct && (
+                          <span className="title">Correct Answer</span>
+                        )}
+                      </label>
+                    </li>
+                  );
+                })}
+              </StyledAnswersOl>
+            </li>
+          );
+        })}
+      </ul>
     </StyledContainer>
   );
 };
 
-export default  YourScore;
+export default YourScore;
